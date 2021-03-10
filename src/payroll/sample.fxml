@@ -12,13 +12,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payroll.Controller">
    <bottom>
@@ -62,17 +62,20 @@
                               </TextField>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="CS">
+                                    <RadioButton fx:id="csRadioBtn" mnemonicParsing="false" text="CS">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </HBox.margin>
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="deptToggle" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="itRadioBtn" mnemonicParsing="false" text="IT" toggleGroup="$deptToggle">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </HBox.margin>
                                     </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="IT">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                                       </HBox.margin>
-                                    </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="ECE">
+                                    <RadioButton fx:id="eceRadioBtn" mnemonicParsing="false" text="ECE" toggleGroup="$deptToggle">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </HBox.margin>
@@ -90,17 +93,20 @@
                                     <Insets top="10.0" />
                                  </GridPane.margin>
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="Full Time">
+                                    <RadioButton fx:id="fullRadioBtn" mnemonicParsing="false" onAction="#hideForFullTime" text="Full Time">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="10.0" top="5.0" />
+                                       </HBox.margin>
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="employeeToggle" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="partRadioBtn" mnemonicParsing="false" onAction="#hideForPartTime" text="Part Time" toggleGroup="$employeeToggle">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="10.0" top="5.0" />
                                        </HBox.margin>
                                     </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="Part Time">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="10.0" top="5.0" />
-                                       </HBox.margin>
-                                    </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="Mangement">
+                                    <RadioButton fx:id="mangRadioBtn" mnemonicParsing="false" onAction="#hideForManagement" text="Mangement" toggleGroup="$employeeToggle">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="10.0" top="5.0" />
                                        </HBox.margin>
@@ -109,7 +115,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
-                                    <Label text="Annual Salary" />
+                                    <Label fx:id="salaryLabel" text="Annual Salary" />
                                     <TextField fx:id="salaryField" />
                                  </children>
                                  <GridPane.margin>
@@ -118,9 +124,9 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                  <children>
-                                    <Label text="Hours Worked" />
+                                    <Label fx:id="hoursLabel" text="Hours Worked" />
                                     <TextField fx:id="hoursField" prefHeight="27.0" prefWidth="71.0" />
-                                    <Label text="Rate" />
+                                    <Label fx:id="rateLabel" text="Rate" />
                                     <TextField fx:id="rateField" prefHeight="27.0" prefWidth="75.0" />
                                  </children>
                                  <GridPane.margin>
@@ -129,9 +135,12 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="Manager" />
-                                    <RadioButton mnemonicParsing="false" text="Department Head" />
-                                    <RadioButton mnemonicParsing="false" text="Director" />
+                                    <RadioButton fx:id="managerRadioBtn" mnemonicParsing="false" text="Manager">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="managerToggle" />
+                                       </toggleGroup></RadioButton>
+                                    <RadioButton fx:id="departmentHeadRadioBtn" mnemonicParsing="false" text="Department Head" toggleGroup="$managerToggle" />
+                                    <RadioButton fx:id="directorRadioBtn" mnemonicParsing="false" text="Director" toggleGroup="$managerToggle" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets top="20.0" />

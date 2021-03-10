@@ -8,6 +8,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
@@ -37,10 +39,19 @@ public class Controller {
     private TextField salaryField;
 
     @FXML
+    private Label salaryLabel;
+
+    @FXML
     private TextField hoursField;
 
     @FXML
+    private Label hoursLabel;
+
+    @FXML
     private TextField rateField;
+
+    @FXML
+    private Label rateLabel;
 
     @FXML
     private MenuItem fileImportMenu;
@@ -59,6 +70,33 @@ public class Controller {
 
     @FXML
     private MenuItem paymentComputeMenu;
+
+    @FXML
+    private RadioButton csRadioBtn;
+
+    @FXML
+    private RadioButton itRadioBtn;
+
+    @FXML
+    private RadioButton eceRadioBtn;
+
+    @FXML
+    private RadioButton fullRadioBtn;
+
+    @FXML
+    private RadioButton partRadioBtn;
+
+    @FXML
+    private RadioButton mangRadioBtn;
+
+    @FXML
+    private RadioButton managerRadioBtn;
+
+    @FXML
+    private RadioButton departmentHeadRadioBtn;
+
+    @FXML
+    private RadioButton directorRadioBtn;
 
 
     @FXML
@@ -110,5 +148,48 @@ public class Controller {
     public void compute() {
 
     }
+
+    @FXML
+    public void hideForFullTime() {
+        hoursLabel.setVisible(false);
+        hoursField.setVisible(false);
+        rateLabel.setVisible(false);
+        rateField.setVisible(false);
+        managerRadioBtn.setVisible(false);
+        departmentHeadRadioBtn.setVisible(false);
+        directorRadioBtn.setVisible(false);
+        salaryLabel.setVisible(true);
+        salaryField.setVisible(true);
+    }
+
+    @FXML
+    public void hideForPartTime() {
+        managerRadioBtn.setVisible(false);
+        departmentHeadRadioBtn.setVisible(false);
+        directorRadioBtn.setVisible(false);
+        salaryLabel.setVisible(false);
+        salaryField.setVisible(false);
+
+        hoursLabel.setVisible(true);
+        hoursField.setVisible(true);
+        rateLabel.setVisible(true);
+        rateField.setVisible(true);
+    }
+
+    @FXML
+    public void hideForManagement() {
+        hoursLabel.setVisible(false);
+        hoursField.setVisible(false);
+        rateLabel.setVisible(false);
+        rateField.setVisible(false);
+
+        managerRadioBtn.setVisible(true);
+        departmentHeadRadioBtn.setVisible(true);
+        directorRadioBtn.setVisible(true);
+        salaryLabel.setVisible(true);
+        salaryField.setVisible(true);
+    }
+
+
 
 }
