@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payroll.Controller">
+   <bottom>
+      <TextArea editable="false" prefHeight="148.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </bottom>
+   <top>
+      <TabPane prefHeight="252.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Employee Management">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="600.0">
+                     <children>
+                        <GridPane prefHeight="206.0" prefWidth="600.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="254.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="380.0" minWidth="10.0" prefWidth="346.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Name" />
+                              <Label text="Department" GridPane.rowIndex="1" />
+                              <Label text="Date Hired" GridPane.rowIndex="2" />
+                              <DatePicker fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets top="10.0" />
+                                 </GridPane.margin>
+                              </DatePicker>
+                              <TextField fx:id="nameField" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" text="CS">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="IT">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="ECE">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <GridPane.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </GridPane.margin>
+                              </HBox>
+                              <HBox prefHeight="22.0" prefWidth="273.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets top="10.0" />
+                                 </GridPane.margin>
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" text="Full Time">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="10.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="Part Time">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="10.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="Mangement">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="10.0" top="5.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <children>
+                                    <Label text="Annual Salary" />
+                                    <TextField fx:id="salaryField" />
+                                 </children>
+                                 <GridPane.margin>
+                                    <Insets top="10.0" />
+                                 </GridPane.margin>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <children>
+                                    <Label text="Hours Worked" />
+                                    <TextField fx:id="hoursField" prefHeight="27.0" prefWidth="71.0" />
+                                    <Label text="Rate" />
+                                    <TextField fx:id="rateField" prefHeight="27.0" prefWidth="75.0" />
+                                 </children>
+                                 <GridPane.margin>
+                                    <Insets top="20.0" />
+                                 </GridPane.margin>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" text="Manager" />
+                                    <RadioButton mnemonicParsing="false" text="Department Head" />
+                                    <RadioButton mnemonicParsing="false" text="Director" />
+                                 </children>
+                                 <GridPane.margin>
+                                    <Insets top="20.0" />
+                                 </GridPane.margin>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                 <children>
+                                    <Button fx:id="add" mnemonicParsing="false" onAction="#addEmployee" text="Add Employee" />
+                                    <Button fx:id="remove" mnemonicParsing="false" onAction="#removeEmployee" text="Remove Employee" />
+                                    <Button fx:id="set" mnemonicParsing="false" onAction="#setHours" text="Set Hours" />
+                                 </children>
+                                 <GridPane.margin>
+                                    <Insets top="20.0" />
+                                 </GridPane.margin>
+                              </HBox>
+                              <Button fx:id="clr" mnemonicParsing="false" onAction="#clear" prefHeight="27.0" prefWidth="91.0" text="Clear" GridPane.rowIndex="7">
+                                 <GridPane.margin>
+                                    <Insets left="80.0" top="20.0" />
+                                 </GridPane.margin>
+                              </Button>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Employee Database">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <MenuBar>
+                          <menus>
+                            <Menu mnemonicParsing="false" text="File">
+                              <items>
+                                <MenuItem fx:id="fileImportMenu" mnemonicParsing="false" onAction="#importEmployees" text="Import" />
+                                    <MenuItem fx:id="fileExportMenu" mnemonicParsing="false" onAction="#exportEmployees" text="Export" />
+                              </items>
+                            </Menu>
+                            <Menu mnemonicParsing="false" text="Print">
+                              <items>
+                                <MenuItem fx:id="printAllMenu" mnemonicParsing="false" onAction="#printAll" text="All Employees" />
+                                    <MenuItem fx:id="printDeptMenu" mnemonicParsing="false" onAction="#printDept" text="By Department" />
+                                    <MenuItem fx:id="printHiredMenu" mnemonicParsing="false" onAction="#printHired" text="By Date Hired" />
+                              </items>
+                            </Menu>
+                            <Menu mnemonicParsing="false" text="Payment">
+                              <items>
+                                <MenuItem fx:id="paymentComputeMenu" mnemonicParsing="false" onAction="#compute" text="Compute" />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </top>
+</BorderPane>
