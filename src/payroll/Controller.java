@@ -1,4 +1,5 @@
 package payroll;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -109,71 +110,118 @@ public class Controller {
 
     private Company myCompany;
 
-    public Controller(){
+    private static final int MANAGER_CODE = 1;
+    private static final int DEPT_HEAD_CODE = 2;
+    private static final int DIRECTOR_CODE = 3;
+
+
+    public Controller() {
         myCompany = new Company();
     }
 
     @FXML
     public void addEmployee() {
 
-        String newName = nameField.getText();
-        String newDept = ((RadioButton)deptToggle.getSelectedToggle()).getText();
+        // Name Validation for all employees
+        if (nameField.getText() == null || nameField.getText() == "") {
+            addEmployeeTextArea.setText("Name cannot be blank");
+            return;
+        }
 
-        System.out.println(newDept);
+        // Department Validation for all employees
+        if (deptToggle.getSelectedToggle() == null) {
+            addEmployeeTextArea.setText("Department must be selected");
+            return;
+        }
 
-        LocalDate  dt = dateField.getValue();
-        String strDt = dt.getMonth().getValue()+"/"+dt.getDayOfMonth()+"/"+dt.getYear();
+        // Date validation for all employees
+        if (dateField.getValue() == null) {
+            addEmployeeTextArea.setText("Date must be selected");
+            return;
+        }
 
-        Date newDateHired = new Date(strDt);
+        LocalDate dt = dateField.getValue();
+        // DO the date beyond
+
+
+        // Employee type validation for all
+        if (employeeToggle.getSelectedToggle() == null) {
+            addEmployeeTextArea.setText("Employee type must be selected");
+            return;
+        }
 
         String employeeType = ((RadioButton)employeeToggle.getSelectedToggle()).getText();
-        String annualSalary = salaryField.getText();
-        String hoursWorked = hoursField.getText();
-        String rate = rateField.getText();
 
-        String managerType = null;
-
-        if(managerToggle.getSelectedToggle() != null) {
-            managerType = ((RadioButton) managerToggle.getSelectedToggle()).getText();
-        }
-
-        Profile newProfile = new Profile(newName, newDept, newDateHired);
-
-        if(employeeType.equals("Full Time")) {
-            Fulltime newFT = new Fulltime(newProfile, Double.parseDouble(annualSalary));
-            boolean added = myCompany.add(newFT);
-            if (added) {
-                addEmployeeTextArea.setText(newFT.toString()+" added");
-            }else  {
-                addEmployeeTextArea.setText(newFT.toString()+" already exists");
+        if(employeeType.equals("Full Time") || employeeType.equals("Management") ) {
+            if (salaryField.getText() == null || salaryField.getText() == "")   {
+                addEmployeeTextArea.setText("Salary cannot be empty");
+                return;
             }
+
+            try {
+                Double.parseDouble(salaryField.getText());
+            }catch (Exception e) {
+                addEmployeeTextArea.setText("Salary must be a number");
+                return;
+            }
+
         }else if(employeeType.equals("Part Time")) {
-            Parttime newPT = new Parttime(newProfile, Double.parseDouble(rate));
-            newPT.setHoursWorked(Integer.parseInt(hoursWorked));
-            boolean added = myCompany.add(newPT);
-            if (added) {
-                addEmployeeTextArea.setText(newPT.toString()+" added");
-            }else  {
-                addEmployeeTextArea.setText(newPT.toString()+" already exists");
+            if (rateField.getText() == null || rateField.getText() == "")   {
+                addEmployeeTextArea.setText("Rate cannot be empty");
+                return;
             }
-        }else if(employeeType.equals("Management")) {
-            Management newMG = new Management(newProfile, Double.parseDouble(annualSalary), 1);
-            boolean added = myCompany.add(newMG);
-            if (added) {
-                addEmployeeTextArea.setText(newMG.toString()+" added");
-            }else  {
-                addEmployeeTextArea.setText(newMG.toString()+" already exists");
+
+            try {
+                Integer.parseInt(rateField.getText());
+            }catch (Exception e) {
+                addEmployeeTextArea.setText("Rate must be a number");
+                return;
+            }
+
+            if (hoursField.getText() == null || hoursField.getText() == "")   {
+                addEmployeeTextArea.setText("Hour cannot be empty");
+                return;
+            }
+
+            try {
+                Integer.parseInt(hoursField.getText());
+            }catch (Exception e) {
+                addEmployeeTextArea.setText("Hour must be a number");
+                return;
             }
 
         }
 
+        if(employeeType.equals("Management") ) {
+            if(managerToggle.getSelectedToggle() == null) {
+                addEmployeeTextArea.setText("Management type must be selected");
+                return;
+            }
+        }
 
+        boolean added = myCompany.add(getEmployee());
+        if (added) {
+            addEmployeeTextArea.setText("Employee added");
+        } else {
+            addEmployeeTextArea.setText("Employee already exists");
+        }
 
-       // System .out.println("User logged in1"+name+department+dtHired);
     }
 
     @FXML
     public void removeEmployee() {
+        // Name Validation for all employees
+        if (nameField.getText() == null || nameField.getText() == "") {
+            addEmployeeTextArea.setText("Name cannot be blank");
+            return;
+        }
+
+        boolean removed = myCompany.remove(getEmployee());
+        if (removed) {
+            addEmployeeTextArea.setText("Employee removed");
+        } else {
+            addEmployeeTextArea.setText("Employee doesn't exists");
+        }
 
     }
 
@@ -258,6 +306,75 @@ public class Controller {
         salaryField.setVisible(true);
     }
 
+    private Employee getEmployee() {
+
+        Employee employee = null;
+        String newName = nameField.getText();
+
+        String newDept = ((RadioButton) deptToggle.getSelectedToggle()).getText();
+
+
+
+        LocalDate dt = dateField.getValue();
+
+
+        String strDt = dt.getMonth().getValue() + "/" + dt.getDayOfMonth() + "/" + dt.getYear();
+
+        Date newDateHired = new Date(strDt);
+
+
+        String newSalary = salaryField.getText();
+
+
+
+        String newHours = hoursField.getText();
+
+
+        String newRate = rateField.getText();
+
+
+        String employeeType = ((RadioButton) employeeToggle.getSelectedToggle()).getText();
+        String annualSalary = salaryField.getText();
+        String hoursWorked = hoursField.getText();
+        String rate = rateField.getText();
+
+        String managerType = null;
+
+
+        if (managerToggle.getSelectedToggle() != null) {
+            managerType = ((RadioButton) managerToggle.getSelectedToggle()).getText();
+        }
+
+        Profile newProfile = new Profile(newName, newDept, newDateHired);
+
+        if (employeeType.equals("Full Time")) {
+
+            employee = new Fulltime(newProfile, Double.parseDouble(annualSalary));
+
+        } else if (employeeType.equals("Part Time")) {
+            Parttime pt = new Parttime(newProfile, Double.parseDouble(rate));
+            pt.setHoursWorked(Integer.parseInt(hoursWorked));
+            employee = pt;
+
+        } else if (employeeType.equals("Management")) {
+            int managerCode = -1;
+
+            if (managerType.equals("Manager")) {
+                managerCode = MANAGER_CODE;
+            }
+            if (managerType.equals("Department Head")) {
+                managerCode = MANAGER_CODE;
+            }
+            if (managerType.equals("Director")) {
+                managerCode = DIRECTOR_CODE;
+            }
+            employee = new Management(newProfile, Double.parseDouble(annualSalary), managerCode);
+
+
+        }
+
+        return employee;
+    }
 
 
 }

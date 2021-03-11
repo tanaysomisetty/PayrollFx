@@ -106,7 +106,7 @@
                                           <Insets bottom="5.0" left="10.0" top="5.0" />
                                        </HBox.margin>
                                     </RadioButton>
-                                    <RadioButton fx:id="mangRadioBtn" mnemonicParsing="false" onAction="#hideForManagement" text="Mangement" toggleGroup="$employeeToggle">
+                                    <RadioButton fx:id="mangRadioBtn" mnemonicParsing="false" onAction="#hideForManagement" text="Management" toggleGroup="$employeeToggle">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="10.0" top="5.0" />
                                        </HBox.margin>
