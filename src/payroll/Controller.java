@@ -1,22 +1,28 @@
 package payroll;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Label;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+import java.time.LocalDate;
+
 public class Controller {
+
+    @FXML
+    private ToggleGroup deptToggle;
+
+    @FXML
+    private ToggleGroup employeeToggle;
+
+    @FXML
+    private ToggleGroup managerToggle;
+
     @FXML
     private Button add;
 
@@ -98,10 +104,72 @@ public class Controller {
     @FXML
     private RadioButton directorRadioBtn;
 
+    @FXML
+    private TextArea addEmployeeTextArea;
+
+    private Company myCompany;
+
+    public Controller(){
+        myCompany = new Company();
+    }
 
     @FXML
     public void addEmployee() {
-        System.out.println("User logged in");
+
+        String newName = nameField.getText();
+        String newDept = ((RadioButton)deptToggle.getSelectedToggle()).getText();
+
+        System.out.println(newDept);
+
+        LocalDate  dt = dateField.getValue();
+        String strDt = dt.getMonth().getValue()+"/"+dt.getDayOfMonth()+"/"+dt.getYear();
+
+        Date newDateHired = new Date(strDt);
+
+        String employeeType = ((RadioButton)employeeToggle.getSelectedToggle()).getText();
+        String annualSalary = salaryField.getText();
+        String hoursWorked = hoursField.getText();
+        String rate = rateField.getText();
+
+        String managerType = null;
+
+        if(managerToggle.getSelectedToggle() != null) {
+            managerType = ((RadioButton) managerToggle.getSelectedToggle()).getText();
+        }
+
+        Profile newProfile = new Profile(newName, newDept, newDateHired);
+
+        if(employeeType.equals("Full Time")) {
+            Fulltime newFT = new Fulltime(newProfile, Double.parseDouble(annualSalary));
+            boolean added = myCompany.add(newFT);
+            if (added) {
+                addEmployeeTextArea.setText(newFT.toString()+" added");
+            }else  {
+                addEmployeeTextArea.setText(newFT.toString()+" already exists");
+            }
+        }else if(employeeType.equals("Part Time")) {
+            Parttime newPT = new Parttime(newProfile, Double.parseDouble(rate));
+            newPT.setHoursWorked(Integer.parseInt(hoursWorked));
+            boolean added = myCompany.add(newPT);
+            if (added) {
+                addEmployeeTextArea.setText(newPT.toString()+" added");
+            }else  {
+                addEmployeeTextArea.setText(newPT.toString()+" already exists");
+            }
+        }else if(employeeType.equals("Management")) {
+            Management newMG = new Management(newProfile, Double.parseDouble(annualSalary), 1);
+            boolean added = myCompany.add(newMG);
+            if (added) {
+                addEmployeeTextArea.setText(newMG.toString()+" added");
+            }else  {
+                addEmployeeTextArea.setText(newMG.toString()+" already exists");
+            }
+
+        }
+
+
+
+       // System .out.println("User logged in1"+name+department+dtHired);
     }
 
     @FXML
