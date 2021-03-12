@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+
+import java.util.Calendar;
+
 /**
  An array-based container class that implements employee database.
  Stores a list of employees, which may include instances of full-time,part-time,
  and management.
  @author Sailokesh Mondi, Tanay Somisetty
  */
-
-import java.util.Calendar;
 
 public class Company {
     private Employee[] emplist;
