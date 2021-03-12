@@ -95,5 +95,14 @@ public class Management extends Fulltime{
         }
     }
 
+    /**
+     * Accessor method that gets the manager code.
+     * @param 'none'
+     * @return an int which is the manager code for a Management object
+     */
+    public int getManagerCode(){
+        return this.managerCode;
     }
+
+}
 

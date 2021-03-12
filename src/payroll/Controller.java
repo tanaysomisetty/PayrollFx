@@ -1,9 +1,27 @@
 package payroll;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TextField;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 import java.text.SimpleDateFormat;
+
+/**
+ The "control" class that is part of the MVC-design pattern.
+ Implements functionalities for the GUI, such as importing,exporting,computing and
+ printing payments for all employees.
+ @author Sailokesh Mondi, Tanay Somisetty
+
+ */
 
 public class Controller {
 
@@ -16,14 +34,6 @@ public class Controller {
     private ToggleGroup employeeToggle;
     @FXML
     private ToggleGroup managerToggle;
-    @FXML
-    private Button add;
-    @FXML
-    private Button remove;
-    @FXML
-    private Button set;
-    @FXML
-    private Button clr;
     @FXML
     private TextField nameField;
     @FXML
@@ -41,37 +51,14 @@ public class Controller {
     @FXML
     private Label rateLabel;
     @FXML
-    private MenuItem fileImportMenu;
-    @FXML
-    private MenuItem fileExportMenu;
-    @FXML
-    private MenuItem printAllMenu;
-    @FXML
-    private MenuItem printDeptMenu;
-    @FXML
-    private MenuItem printHiredMenu;
-    @FXML
-    private MenuItem paymentComputeMenu;
-    @FXML
-    private RadioButton csRadioBtn;
-    @FXML
-    private RadioButton itRadioBtn;
-    @FXML
-    private RadioButton eceRadioBtn;
-    @FXML
-    private RadioButton fullRadioBtn;
-    @FXML
-    private RadioButton partRadioBtn;
-    @FXML
-    private RadioButton mangRadioBtn;
-    @FXML
     private RadioButton managerRadioBtn;
     @FXML
     private RadioButton departmentHeadRadioBtn;
     @FXML
     private RadioButton directorRadioBtn;
     @FXML
-    private TextArea addEmployeeTextArea;
+    private TextArea textArea;
+
     private final Company myCompany;
 
 
@@ -79,14 +66,19 @@ public class Controller {
         myCompany = new Company();
     }
 
+    /**
+     Method to add an employee to the GUI database.
+     Checks for all validations and handle all exceptions.
+     @param 'none'
+     */
     @FXML
     public void addEmployee() {
 
-        if (doBasiValidation()) {
+        if (doBasicValidation()) {
 
             // Employee type validation for all
             if (employeeToggle.getSelectedToggle() == null) {
-                addEmployeeTextArea.setText("Employee type must be selected");
+                textArea.appendText("Employee type must be selected"  + "\n");
                 return;
             }
 
@@ -94,27 +86,27 @@ public class Controller {
 
             if (employeeType.equals("Full Time") || employeeType.equals("Management")) {
                 if (salaryField.getText() == null || salaryField.getText() == "") {
-                    addEmployeeTextArea.setText("Salary cannot be empty");
+                    textArea.appendText("Salary cannot be empty"  + "\n");
                     return;
                 }
 
                 try {
                     Double.parseDouble(salaryField.getText());
                 } catch (Exception e) {
-                    addEmployeeTextArea.setText("Salary must be a number");
+                    textArea.appendText("Salary must be a number" + "\n");
                     return;
                 }
 
             } else if (employeeType.equals("Part Time")) {
                 if (rateField.getText() == null || rateField.getText() == "") {
-                    addEmployeeTextArea.setText("Rate cannot be empty");
+                    textArea.appendText("Rate cannot be empty"  + "\n");
                     return;
                 }
 
                 try {
-                    Integer.parseInt(rateField.getText());
+                    Double.parseDouble(rateField.getText());
                 } catch (Exception e) {
-                    addEmployeeTextArea.setText("Rate must be a number");
+                    textArea.appendText("Rate must be a number"  + "\n");
                     return;
                 }
 
@@ -122,84 +114,204 @@ public class Controller {
 
             if (employeeType.equals("Management")) {
                 if (managerToggle.getSelectedToggle() == null) {
-                    addEmployeeTextArea.setText("Management type must be selected");
+                    textArea.appendText("Management type must be selected"  + "\n");
                     return;
                 }
             }
 
             boolean added = myCompany.add(getEmployee());
             if (added) {
-                addEmployeeTextArea.setText("Employee added");
+                textArea.appendText("Employee added"  + "\n");
             } else {
-                addEmployeeTextArea.setText("Employee already exists");
+                textArea.appendText("Employee already exists"  + "\n");
             }
         }
 
     }
 
+    /**
+     Method to remove an employee from GUI database and calls remove in Company class
+     Checks for all validations and handles all exceptions.
+     @param 'none'
+     */
     @FXML
     public void removeEmployee() {
-        if (doBasiValidation()) {
+        if (doBasicValidation()) {
             boolean removed = myCompany.remove(getBasicEmployee());
             if (removed) {
-                addEmployeeTextArea.setText("Employee removed");
+                textArea.appendText("Employee removed"  + "\n");
             } else {
-                addEmployeeTextArea.setText("Employee doesn't exist");
+                textArea.appendText("Employee doesn't exist"  + "\n");
             }
         }
     }
 
+    /**
+     Method to set hours for a part-time employee for GUI database and calls setHours in Company class.
+     Checks for all validations and handles all exceptions.
+     @param 'none'
+     */
     @FXML
     public void setHours() {
-        if (doBasiValidation() && doHoursValidation()) {
+        if (doBasicValidation() && doHoursValidation()) {
             Employee employee = getBasicEmployee();
             Parttime parttime = new Parttime(employee.getProfile(), 0);
             parttime.setHoursWorked(Integer.parseInt(hoursField.getText()));
             boolean success = myCompany.setHours(parttime);
             if(success) {
-                addEmployeeTextArea.setText("Working Hours set");
+                textArea.appendText("Working Hours set"  + "\n");
             }else {
-                addEmployeeTextArea.setText("Employee doesn't exist");
+                textArea.appendText("Employee doesn't exist"  + "\n");
             }
         }
 
     }
 
+    /**
+     Method to clear all fields entered into the GUI including radio buttons for employee type and department type.
+     @param 'none'
+     */
     @FXML
     public void clear() {
+        nameField.appendText("");
+        deptToggle.selectToggle(null);
+        dateField.setValue(null);
+        employeeToggle.selectToggle(null);
+        salaryField.appendText("");
+        hoursField.appendText("");
+        rateField.appendText("");
+        managerToggle.selectToggle(null);
 
     }
 
+    /**
+     Method to import a file to the GUI database.
+     Checks if file is not selected.
+     @param 'none'
+     */
     @FXML
     public void importEmployees() {
 
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.getExtensionFilters().add(new ExtensionFilter("TXT Files", "*.txt"));
+      File file = fileChooser.showOpenDialog(null);
+
+      try {
+          Scanner sc = new Scanner(file);
+          textArea.appendText("File imported" + "\n");
+          while (sc.hasNextLine()) {
+              String line = sc.nextLine();
+              String[] tokens = line.split(",");
+
+              final int EMP_TYPE_INDEX = 0;
+              final int NAME_INDEX = 1;
+              final int DEPT_INDEX = 2;
+              final int DATE_INDEX = 3;
+              final int COMP_INDEX = 4;
+              final int MANG_INDEX = 5;
+
+              final int FIRST_NAME_INDEX = 0;
+              final int LAST_NAME_INDEX = 1;
+
+              String[] nameTokens = tokens[NAME_INDEX].split("\\s+");
+              String name = nameTokens[LAST_NAME_INDEX] + "," + nameTokens[FIRST_NAME_INDEX];
+              Date date = new Date(tokens[DATE_INDEX]);
+              Profile profile = new Profile(name, tokens[DEPT_INDEX], date);
+
+              if (tokens[EMP_TYPE_INDEX].equals("P")) {
+                Parttime parttime = new Parttime(profile, Double.parseDouble(tokens[COMP_INDEX]));
+                myCompany.add(parttime);
+
+              }
+              else if (tokens[EMP_TYPE_INDEX].equals("F")) {
+                  Fulltime fulltime = new Fulltime(profile, Double.parseDouble(tokens[COMP_INDEX]));
+                  myCompany.add(fulltime);
+              }
+
+              else if (tokens[EMP_TYPE_INDEX].equals("M")) {
+                  Management management = new Management(profile, Double.parseDouble(tokens[COMP_INDEX]),
+                          Integer.parseInt(tokens[MANG_INDEX]));
+                  myCompany.add(management);
+              }
+          }
+          printAll();
+          sc.close();
+      }
+      catch (FileNotFoundException e) {
+          textArea.appendText("No File Selected" + "\n");
+      }
+
     }
 
+    /**
+     Method to export the file from the database.
+     Checks to see if database is empty.
+     @param 'none'
+     */
     @FXML
     public void exportEmployees() {
-
+        if (myCompany.exportDatabase() == null) {
+            textArea.appendText("Cannot export file, employee database may be empty" + "\n");
+        }
+        else {
+            File file = myCompany.exportDatabase();
+            textArea.appendText("Employee database exported, saved at " + file.getAbsolutePath() + "\n");
+            printAll();
+        }
     }
 
+    /**
+     Method to print all employees in the current order.
+     Calls print method in Company class.
+     @param 'none'
+     */
     @FXML
     public void printAll() {
-
+        textArea.appendText(myCompany.print());
     }
 
+    /**
+     Method to print all employees by department.
+     Calls printByDepartment in Company class.
+     @param 'none
+     */
     @FXML
     public void printDept() {
-
+        textArea.appendText(myCompany.printByDepartment());
     }
 
+    /**
+     Method to print all employees by date hired.
+     Calls printByDate in Company class.
+     @param 'none'
+     */
     @FXML
     public void printHired() {
-
+        textArea.appendText(myCompany.printByDate());
     }
 
+    /**
+     Method to compute calculations for all employees.
+     Calls processPayments in Company class.
+     @param 'none'
+     */
     @FXML
     public void compute() {
-
+        int numEmployee = myCompany.getNumEmployee();
+        if (numEmployee == 0) {
+            textArea.appendText("Employee database is empty." + "\n");
+        }
+        else {
+            myCompany.processPayments();
+            textArea.appendText("Calculation of employee payments is done." + "\n");
+        }
     }
 
+    /**
+     Method to display only properties for a Full-time employee and hide other fields
+     @param 'none'
+     @return void return type
+     */
     @FXML
     public void hideForFullTime() {
         hoursLabel.setVisible(false);
@@ -213,6 +325,11 @@ public class Controller {
         salaryField.setVisible(true);
     }
 
+    /**
+     Method to display only properties for a Part-time employee and hide other fields
+     @param 'none'
+     @return void return type
+     */
     @FXML
     public void hideForPartTime() {
         managerRadioBtn.setVisible(false);
@@ -227,6 +344,11 @@ public class Controller {
         rateField.setVisible(true);
     }
 
+    /**
+     Method to display only properties for a Management employee and hide other fields
+     @param 'none'
+     @return void return type
+     */
     @FXML
     public void hideForManagement() {
         hoursLabel.setVisible(false);
@@ -242,9 +364,9 @@ public class Controller {
     }
 
     /**
-     * Helper method to get the employee type
-     *
-     * @return Employee object
+     Helper method to get the employee type with all fields pertaining to the emplyoee
+     @param 'none'
+     @return Employee object
      */
     private Employee getEmployee() {
 
@@ -307,11 +429,17 @@ public class Controller {
         return employee;
     }
 
+    /**
+     Helper method to do all hours validation for invalid hours
+     @param 'none'
+     * @return false if hours are negative or over 100, true otherwise
+     */
+
     private boolean doHoursValidation() {
         final int MAX_HOURS = 100;
 
         if (hoursField.getText() == null) {
-            addEmployeeTextArea.setText("Invalid working hours");
+            textArea.appendText("Invalid working hours"  + "\n");
             return false;
         }
 
@@ -320,40 +448,51 @@ public class Controller {
             try {
                 hours = Integer.parseInt(hoursField.getText());
             } catch (Exception e) {
-                addEmployeeTextArea.setText("Invalid working hours");
+                textArea.appendText("Invalid working hours"  + "\n");
                 return false;
             }
 
             if (hours <= 0 || hours > MAX_HOURS) {
-                addEmployeeTextArea.setText("Invalid working hours");
+                textArea.appendText("Invalid working hours"  + "\n");
                 return false;
             }
 
         return true;
     }
 
-    private boolean doBasiValidation() {
+    /**
+     Helper method to validate errors such as name fields,departments, and dates
+     @param 'none'
+     *@return false if either name is empty, department is not selected, or date is invalid, true otherwise
+     */
+
+    private boolean doBasicValidation() {
 
         // Name Validation for all employees
         if (nameField.getText() == null || nameField.getText() == "") {
-            addEmployeeTextArea.setText("Name cannot be blank");
+            textArea.appendText("Name cannot be blank"  + "\n");
             return false;
         }
 
         // Department Validation for all employees
         if (deptToggle.getSelectedToggle() == null) {
-            addEmployeeTextArea.setText("Department must be selected");
+            textArea.appendText("Department must be selected"  + "\n");
             return false;
         }
 
         if (!isValidDate()) {
-            addEmployeeTextArea.setText("Invalid date");
+            textArea.appendText("Invalid date"  + "\n");
             return false;
         }
         return true;
 
     }
 
+    /**
+     Helper method to get the name, department, date hired, and profile fields of an employee
+     @param 'none'
+     * @return Employee object
+     */
     private Employee getBasicEmployee() {
 
 
@@ -370,6 +509,11 @@ public class Controller {
         return new Employee(newProfile, 0);
     }
 
+    /**
+     Helper method which checks for date validation by calling isValid in Date class
+     @param 'none'
+     @return true if the date is valid, false otherwise
+     */
     private boolean isValidDate() {
 
         String strDt = dateField.getEditor().getText();

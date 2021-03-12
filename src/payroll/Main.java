@@ -1,14 +1,15 @@
 package payroll;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+    /**
+    Initializes the stage and the GUI.
+    @author sailokesh Mondi, Tanay Somisetty
+ */
 
 public class Main extends Application {
 
@@ -16,6 +17,11 @@ public class Main extends Application {
         launch(args);
     }
 
+        /**
+         Starts the scene and opens the window.
+         * @param primaryStage
+         * @throws Exception
+         */
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));

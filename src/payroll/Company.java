@@ -1,5 +1,9 @@
 package payroll;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 /**
  An array-based container class that implements employee database.
  Stores a list of employees, which may include instances of full-time,part-time,
@@ -44,8 +48,9 @@ public class Company {
      */
     private void grow() {
 
+        final int capacityToIncreaseBy = 4;
         int currCapacity = this.emplist.length;
-        Employee[] newEmployees = new Employee[currCapacity + 4];
+        Employee[] newEmployees = new Employee[currCapacity + capacityToIncreaseBy];
 
         for (int i = 0; i < currCapacity; i++) {
             newEmployees[i] = emplist[i];
@@ -113,7 +118,7 @@ public class Company {
     /**
       Method to set working hours for a part-time employee
       @param employee object
-      @return
+      @return true if successful, false otherwise
      */
     public boolean setHours(Employee employee) {
 
@@ -158,16 +163,18 @@ public class Company {
     /**
      Method to print earning statements for all employees.
      @param 'none'
+     @return String output of print
      */
-    public void print() {
+    public String print() {
         if (numEmployee == 0) {
-            System.out.println("Employee database is empty.");
-            return;
+            return "Employee database is empty";
         }
-        System.out.println("--Printing earning statements for all employees--");
+        String output = "--Printing earning statements for all employees--" + "\n";
         for (int i = 0; i < numEmployee; i++) {
-            System.out.println(emplist[i].toString());
+            output = output + emplist[i].toString() + "\n";
         }
+
+        return output;
     }
 
     /**
@@ -204,11 +211,11 @@ public class Company {
     /**
      Method to print earning statements by department.
      @param 'none'
+     @return String output of print by department
      */
-    public void printByDepartment() {
+    public String printByDepartment() {
         if (numEmployee == 0) {
-            System.out.println("Employee database is empty.");
-            return;
+            return "Employee database is empty.";
         }
 
         Employee[] cSDepArray = new Employee[emplist.length];
@@ -219,7 +226,7 @@ public class Company {
         int eceDepCount = 0;
         int itDepCount = 0;
 
-        System.out.println("--Printing earning statements by department--");
+        String output = "--Printing earning statements by department--" + "\n";
 
         for (int i = 0; i < numEmployee; i++) {
             String department = emplist[i].getProfile().getDepartment();
@@ -236,39 +243,96 @@ public class Company {
         }
 
         for (int i = 0; i < csDepCount; i++) {
-            System.out.println(cSDepArray[i]);
+            output = output + cSDepArray[i] + "\n";
         }
 
         for (int i = 0; i < eceDepCount; i++) {
-            System.out.println(eCEDepArray[i]);
+            output = output + eCEDepArray[i] + "\n";
         }
 
         for (int i = 0; i < itDepCount; i++) {
-            System.out.println(itDepArray[i]);
+            output = output + itDepArray[i] + "\n";
         }
 
-
+        return output;
     }
 
     /**
      Method to print earning statements by date hired.
      @param 'none'
+     @return String output of print by date
      */
-    public void printByDate() {
+    public String printByDate() {
 
         if (numEmployee == 0) {
             System.out.println("Employee database is empty.");
-        } else {
+            return "Employee database is empty.";
+        }
+        else {
             selectionSort(SORT_BY_DATE);
-            System.out.println("--Printing earning statements by date hired--");
+            String output = "--Printing earning statements by date hired--" + "\n";
             for (int i = 0; i < numEmployee; i++) {
-                System.out.println(emplist[i].toString());
+                output = output + emplist[i].toString() + "\n";
             }
+            return output;
         }
     }
 
+    /**
+     * Accessor method to get the number of employees.
+     * @param 'none'
+     * @return int value of the number of employees in emplist
+     */
     public int getNumEmployee() {
         return this.numEmployee;
+    }
+
+    /**
+     * Export employees from emplist into a text file
+     * @param 'none'
+     * @return a File object containing the employees in format 'X, First Last,DEPT,MM/DD/YYYY,#####'
+     */
+    public File exportDatabase() {
+        if (numEmployee == 0){
+            return null;
+        }
+
+        File file = new File("Database.txt");
+        try {
+            PrintWriter pw = new PrintWriter(file);
+            for (int i = 0; i < numEmployee; i++) {
+                Employee currEmp = emplist[i];
+                Profile currProf = currEmp.getProfile();
+                String output = "";
+
+                final int LAST_NAME_INDEX = 0;
+                final int FIRST_NAME_INDEX = 1;
+                String nameTokens[] = currProf.getName().split(",");
+                output = nameTokens[FIRST_NAME_INDEX] + " " + nameTokens[LAST_NAME_INDEX] + "," +
+                        currProf.getDepartment() + "," + currProf.getDateHired().getDate() + "," +
+                        currEmp.getComp();
+
+
+                if (currEmp instanceof Parttime) {
+                    output = "P," + output;
+                }
+                else if (currEmp instanceof Fulltime) {
+                    output = "F," + output;
+                }
+                else if (currEmp instanceof Management) {
+                    Management currMang = (Management) currEmp;
+                    output = "M," + output + "," + currMang.getManagerCode();
+
+                }
+
+                pw.println(output);
+            }
+            pw.close();
+        }
+        catch (FileNotFoundException e) {
+            return null;
+        }
+        return file;
     }
 
 }
