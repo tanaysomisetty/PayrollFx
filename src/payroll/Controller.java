@@ -308,42 +308,49 @@ public class Controller {
     }
 
     private boolean doHoursValidation() {
-        boolean valid = false;
         final int MAX_HOURS = 100;
 
-        if (hoursField.getText() != null) {
+        if (hoursField.getText() == null) {
+            addEmployeeTextArea.setText("Invalid working hours");
+            return false;
+        }
+
+
             int hours = -1;
             try {
                 hours = Integer.parseInt(hoursField.getText());
             } catch (Exception e) {
+                addEmployeeTextArea.setText("Invalid working hours");
+                return false;
             }
-            if (hours > 0 && hours <= MAX_HOURS) {
-                valid = true;
+
+            if (hours <= 0 || hours > MAX_HOURS) {
+                addEmployeeTextArea.setText("Invalid working hours");
+                return false;
             }
-        }
-        return valid;
+
+        return true;
     }
 
     private boolean doBasiValidation() {
-        boolean valid = true;
 
         // Name Validation for all employees
         if (nameField.getText() == null || nameField.getText() == "") {
             addEmployeeTextArea.setText("Name cannot be blank");
-            valid = false;
+            return false;
         }
 
         // Department Validation for all employees
         if (deptToggle.getSelectedToggle() == null) {
             addEmployeeTextArea.setText("Department must be selected");
-            valid = false;
+            return false;
         }
 
         if (!isValidDate()) {
             addEmployeeTextArea.setText("Invalid date");
-            valid = false;
+            return false;
         }
-        return valid;
+        return true;
 
     }
 
@@ -364,13 +371,13 @@ public class Controller {
     }
 
     private boolean isValidDate() {
-        boolean valid = true;
+
         String strDt = dateField.getEditor().getText();
 
 
         // Date validation for all employees
         if (strDt == null) {
-            valid = false;
+            return false;
         }
 
         try {
@@ -378,14 +385,13 @@ public class Controller {
             sdf.parse(strDt);
             Date newDateHired = new Date(strDt);
             if (!newDateHired.isValid()) {
-                valid = false;
+                return false;
             }
         } catch (Exception e) {
-            valid = false;
+            return false;
         }
 
-
-        return valid;
+        return true;
     }
 
 
