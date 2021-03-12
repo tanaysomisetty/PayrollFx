@@ -376,14 +376,14 @@ public class Controller {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
             sdf.parse(strDt);
+            Date newDateHired = new Date(strDt);
+            if (!newDateHired.isValid()) {
+                valid = false;
+            }
         } catch (Exception e) {
             valid = false;
         }
 
-        Date newDateHired = new Date(strDt);
-        if (!newDateHired.isValid()) {
-            valid = false;
-        }
 
         return valid;
     }
