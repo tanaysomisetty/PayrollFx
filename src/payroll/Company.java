@@ -117,13 +117,15 @@ public class Company {
      */
     public boolean setHours(Employee employee) {
 
+        final int MAX_HOURS = 100;
+
         if (employee instanceof Parttime) {
             int setHoursIndex = find(employee);
             if (setHoursIndex < 0) {
                 return false;
             }
             int hours = ((Parttime) employee).getHoursWorked();
-            if(hours > 0 && hours <= 100) {
+            if(hours > 0 && hours <= MAX_HOURS) {
                 ((Parttime) emplist[setHoursIndex]).setHoursWorked(hours);
                 return true;
             }
